@@ -1,0 +1,92 @@
+import React, { useState } from 'react';
+
+// Icon placeholders
+const icons = {
+  IT: "🖥️",
+  Environment: "🌱",
+  Marketing: "📢",
+  Location: "📍",
+  Skill: "✅",
+};
+
+const RecommendationCard = ({ internship }) => (
+  <div style={{ border: '1px solid #ddd', borderRadius: 10, padding: 16, margin: 12, boxShadow: '0 2px 8px #eee', background: '#fff' }}>
+    <h3>{icons[internship.sector]} {internship.title}</h3>
+    <p>{icons.Location} {internship.location}</p>
+    <div>
+      {internship.skills.map(skill => (
+        <span key={skill} style={{ marginRight: 8 }}>{icons.Skill} {skill}</span>
+      ))}
+    </div>
+    <div style={{ marginTop: 8, color: '#2F80ED' }}>
+      Reason: {internship.reason}
+    </div>
+    <div style={{ marginTop: 4, fontSize: 12, color: '#757575' }}>
+      Tip: {internship.tip}
+    </div>
+  </div>
+);
+
+const MainForm = ({ onSubmit }) => {
+  const [form, setForm] = useState({
+    name: "",
+    education: "",
+    skills: "",
+    interests: "",
+    location: ""
+  });
+  // Placeholder for voice/chatbot integration  
+  const handleVoiceInput = () => {
+    // Integrate voice/chatbot input logic here
+    alert('Voice/Chatbot feature coming soon!');
+  };
+  return (
+    <form onSubmit={e => { e.preventDefault(); onSubmit(form); }}>
+      <input placeholder="Name" onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+      <input placeholder="Education" onChange={e => setForm(f => ({ ...f, education: e.target.value }))} />
+      <input placeholder="Skills (comma separated)" onChange={e => setForm(f => ({ ...f, skills: e.target.value }))} />
+      <input placeholder="Sector Interests" onChange={e => setForm(f => ({ ...f, interests: e.target.value }))} />
+      <input placeholder="Preferred Location" onChange={e => setForm(f => ({ ...f, location: e.target.value }))} />
+      <button type="button" onClick={handleVoiceInput}>🎤 Use Voice/Chatbot</button>
+      <button type="submit">Get Recommendations</button>
+    </form>
+  );
+};
+
+export default function App() {
+  const [recommendations, setRecommendations] = useState([]);
+  // Simulate recommendations
+  const sampleRecommendations = [
+    {
+      title: "Data Analyst Intern",
+      sector: "IT",
+      location: "Delhi",
+      skills: ["Excel", "SQL"],
+      reason: "Matches your skill and interest in IT.",
+      tip: "Strong basics in Excel will help excel."
+    },
+    {
+      title: "Marketing Intern",
+      sector: "Marketing",
+      location: "Mumbai",
+      skills: ["Communication", "Social Media"],
+      reason: "High skill match in marketing sector.",
+      tip: "Highlight past projects in application."
+    },
+  ];
+  const handleSubmit = (form) => {
+    // Integrate backend API call here
+    setRecommendations(sampleRecommendations);
+  };
+  return (
+    <div style={{ maxWidth: 400, margin: 'auto', padding: 24 }}>
+      <h2>PM Internship Scheme Recommendation</h2>
+      <MainForm onSubmit={handleSubmit} />
+      <div style={{ marginTop: 32 }}>
+        {recommendations.map((rec, idx) => (
+          <RecommendationCard internship={rec} key={idx} />
+        ))}
+      </div>
+    </div>
+  );
+}
